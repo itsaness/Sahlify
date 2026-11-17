@@ -1,0 +1,97 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-sahlify}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME:-sahlify}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-sahlify} -d ${DB_NAME:-sahlify}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/backend.Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DEPLOYMENT_MODE: ${DEPLOYMENT_MODE:-cloud}
+      NODE_ENV: production
+      PORT: 3000
+      DB_HOST: ${DB_HOST:-postgres}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_USER: ${DB_USER:-sahlify}
+      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
+      DB_NAME: ${DB_NAME:-sahlify}
+      DB_POOL_MAX: ${DB_POOL_MAX:-20}
+      DB_SSL: ${DB_SSL:-false}
+      TRUST_PROXY: ${TRUST_PROXY:-1}
+      STORE_BASE_DOMAINS: ${STORE_BASE_DOMAINS:-localhost,sahlify.dz}
+      TRUST_STORE_HOST_HEADER: ${TRUST_STORE_HOST_HEADER:-false}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?Set BETTER_AUTH_SECRET}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL:-http://localhost}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      CHARGILY_API_KEY: ${CHARGILY_API_KEY:-}
+      CHARGILY_API_BASE: ${CHARGILY_API_BASE:-https://pay.chargily.net/api/v2}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:?Set ENCRYPTION_KEY}
+      AI_PROVIDER: ${AI_PROVIDER:-openrouter}
+      AI_API_KEY: ${AI_API_KEY:-}
+      AI_MODEL_LARGE: ${AI_MODEL_LARGE:-}
+      AI_MODEL_SMALL: ${AI_MODEL_SMALL:-}
+      AI_ZDR: ${AI_ZDR:-true}
+      META_GRAPH_VERSION: ${META_GRAPH_VERSION:-v21.0}
+      STORAGE_DRIVER: ${STORAGE_DRIVER:-local}
+      UPLOADS_DIR: /app/backend/uploads
+    volumes:
+      - uploads:/app/backend/uploads
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3000/health >/dev/null || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  storefront:
+    build:
+      context: ..
+      dockerfile: docker/storefront.Dockerfile
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    environment:
+      NUXT_PUBLIC_API_BASE: ${NUXT_PUBLIC_API_BASE:-http://backend:3000}
+
+  caddy:
+    build:
+      context: ..
+      dockerfile: docker/caddy.Dockerfile
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+      storefront:
+        condition: service_started
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      SAHLIFY_DOMAIN: ${SAHLIFY_DOMAIN:-localhost}
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  pgdata:
+  uploads:
+  caddy_data:
+  caddy_config:

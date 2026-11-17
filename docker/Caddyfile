@@ -1,0 +1,46 @@
+{
+  # For cloud mode with custom domains, enable on_demand_tls:
+  # on_demand_tls {
+  #   ask http://backend:3000/internal/domain-check
+  # }
+}
+
+# Main platform domain -> Backend API + Merchant Dashboard SPA
+{$SAHLIFY_DOMAIN:localhost} {
+  handle /api/* {
+    reverse_proxy backend:3000 {
+      header_up -X-Store-Host
+    }
+  }
+
+  handle /uploads/* {
+    reverse_proxy backend:3000
+  }
+
+  handle /health {
+    reverse_proxy backend:3000
+  }
+
+  handle {
+    root * /srv/dashboard
+    try_files {path} /index.html
+    file_server
+  }
+}
+
+# Storefront subdomains -> Backend API + Multi-tenant Nuxt Storefront
+*.{$SAHLIFY_DOMAIN:localhost} {
+  handle /api/* {
+    reverse_proxy backend:3000 {
+      header_up -X-Store-Host
+    }
+  }
+
+  handle /uploads/* {
+    reverse_proxy backend:3000
+  }
+
+  handle {
+    reverse_proxy storefront:3001
+  }
+}

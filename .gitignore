@@ -1,0 +1,72 @@
+# =============================================================================
+# 1. Dependencies & Package Managers
+# =============================================================================
+node_modules/
+frontend/frontend/node_modules/
+storefront/node_modules/
+backend/node_modules/
+.pnpm-store/
+.npm/
+
+# =============================================================================
+# 2. Environment & Secrets (NEVER commit)
+# =============================================================================
+.env
+.env.*
+!.env.example
+backend/.env
+backend/.env.*
+!backend/.env.example
+frontend/frontend/.env
+frontend/frontend/.env.*
+storefront/.env
+storefront/.env.*
+docker/.env
+
+# =============================================================================
+# 3. Build, SSR & Cache Outputs
+# =============================================================================
+dist/
+dist-ssr/
+frontend/frontend/dist/
+storefront/.nuxt/
+storefront/.output/
+.cache/
+*.tsbuildinfo
+.eslintcache
+
+# =============================================================================
+# 4. Runtime Uploads, Logs & Local Data
+# =============================================================================
+backend/uploads/*
+!backend/uploads/.gitkeep
+logs/
+*.log
+npm-debug.log*
+
+# =============================================================================
+# 5. Private Cloud-Only Modules (Exclude from Public Self-Hosted Repo)
+# =============================================================================
+# Cloud SaaS billing & platform admin backend modules
+backend/src/modules/billing/
+backend/src/modules/admin/
+backend/src/jobs/billingLifecycleJob.js
+backend/src/db/migrations/004_admin_and_billing_lifecycle.sql
+backend/src/db/migrations/006_account_subscriptions.sql
+backend/tests/phase9.test.js
+
+# Cloud SaaS billing & admin frontend views
+frontend/frontend/src/views/AdminView.vue
+frontend/frontend/src/views/BillingView.vue
+frontend/frontend/src/views/PricingView.vue
+frontend/frontend/src/composables/useBilling.js
+
+# =============================================================================
+# 6. OS, IDE & Agent Files
+# =============================================================================
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.gemini/
+*.sw?
