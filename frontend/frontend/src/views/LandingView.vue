@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router'
 import { useI18n } from '../composables/useI18n.js'
 import PublicNavbar from '../components/PublicNavbar.vue'
+import PublicFooter from '../components/PublicFooter.vue'
 
 const router = useRouter()
 const navigate = (to) => router.push(to)
@@ -96,16 +97,7 @@ const { t } = useI18n()
       </section>
     </main>
 
-    <footer class="public-footer">
-      <div class="container row-between">
-        <span class="text-sm text-muted">{{ t.landing.footerText }}</span>
-        <div class="row text-sm">
-          <a href="/docs" @click.prevent="navigate('/docs')">{{ t.nav.docs }}</a>
-          <a href="/pricing" @click.prevent="navigate('/pricing')">{{ t.nav.pricing }}</a>
-          <a href="/auth" @click.prevent="navigate('/auth')">{{ t.landing.merchantSignIn }}</a>
-        </div>
-      </div>
-    </footer>
+    <PublicFooter />
   </div>
 </template>
 

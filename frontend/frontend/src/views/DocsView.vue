@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router'
 import { useI18n } from '../composables/useI18n.js'
 import PublicNavbar from '../components/PublicNavbar.vue'
+import PublicFooter from '../components/PublicFooter.vue'
 
 const router = useRouter()
 const navigate = (to) => router.push(to)
@@ -61,8 +62,8 @@ const { t } = useI18n()
             Storefront, and Caddy reverse proxy).
           </p>
           <pre class="code-block"># 1. Clone the repository
-git clone https://github.com/your-org/sahlify.git
-cd sahlify
+git clone https://github.com/itsaness/Sahlify.git
+cd Sahlify
 
 # 2. Configure environment variables
 cp backend/.env.example docker/.env
@@ -157,6 +158,8 @@ npm run dev</pre>
         </div>
       </article>
     </div>
+
+    <PublicFooter />
   </div>
 </template>
 

@@ -45,6 +45,9 @@ const messages = {
       selectStore: 'Select a store...',
       admin: 'Admin',
       documentation: 'Documentation →',
+      terms: 'Terms',
+      privacy: 'Privacy',
+      contact: 'Contact',
     },
     theme: {
       dark: 'Dark',
@@ -156,6 +159,9 @@ const messages = {
       selectStore: 'Choisir une boutique...',
       admin: 'Admin',
       documentation: 'Documentation →',
+      terms: 'Conditions',
+      privacy: 'Confidentialité',
+      contact: 'Contact',
     },
     theme: {
       dark: 'Sombre',
@@ -267,6 +273,9 @@ const messages = {
       selectStore: 'اختر متجراً...',
       admin: 'الإدارة',
       documentation: 'التوثيق ←',
+      terms: 'الشروط',
+      privacy: 'الخصوصية',
+      contact: 'اتصل بنا',
     },
     theme: {
       dark: 'داكن',

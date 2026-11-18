@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../composables/useAuth.js'
 import { useI18n } from '../composables/useI18n.js'
 import PublicNavbar from '../components/PublicNavbar.vue'
+import PublicFooter from '../components/PublicFooter.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -71,7 +72,7 @@ async function handleGoogleSignIn() {
 </script>
 
 <template>
-  <div class="auth-page">
+  <div class="auth-page" style="min-height: 100vh; display: flex; flex-direction: column">
     <PublicNavbar />
 
     <main class="container page-section auth-container">
@@ -185,9 +186,16 @@ async function handleGoogleSignIn() {
                   : t.auth.registerTab
             }}
           </button>
+
+          <p v-if="mode === 'register'" class="text-sm text-muted" style="text-align: center">
+            By signing up you agree to
+            <router-link to="/terms">Terms of Service</router-link>.
+          </p>
         </form>
       </div>
     </main>
+
+    <PublicFooter />
   </div>
 </template>
 

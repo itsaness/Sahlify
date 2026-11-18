@@ -1,13 +1,13 @@
 services:
   postgres:
-    image: postgres:16-alpine
+    image: postgres:18-alpine
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${DB_USER:-sahlify}
       POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME:-sahlify}
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-sahlify} -d ${DB_NAME:-sahlify}"]
       interval: 5s
@@ -16,7 +16,7 @@ services:
 
   backend:
     build:
-      context: ..
+      context: .
       dockerfile: docker/backend.Dockerfile
     restart: unless-stopped
     depends_on:
@@ -62,7 +62,7 @@ services:
 
   storefront:
     build:
-      context: ..
+      context: .
       dockerfile: docker/storefront.Dockerfile
     restart: unless-stopped
     depends_on:
@@ -73,7 +73,7 @@ services:
 
   caddy:
     build:
-      context: ..
+      context: .
       dockerfile: docker/caddy.Dockerfile
     restart: unless-stopped
     depends_on:

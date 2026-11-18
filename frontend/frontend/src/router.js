@@ -4,6 +4,9 @@ import { usePlatformInfo } from './lib/api.js'
 
 import LandingView from './views/LandingView.vue'
 import DocsView from './views/DocsView.vue'
+import TermsView from './views/TermsView.vue'
+import PrivacyView from './views/PrivacyView.vue'
+import ContactView from './views/ContactView.vue'
 import AuthView from './views/AuthView.vue'
 import StoresView from './views/StoresView.vue'
 import ProductsView from './views/ProductsView.vue'
@@ -20,6 +23,9 @@ const cloudViews = import.meta.glob('./views/{PricingView,BillingView,AdminView}
 const routes = [
   { path: '/', name: 'landing', component: LandingView },
   { path: '/docs', name: 'docs', component: DocsView },
+  { path: '/terms', name: 'terms', component: TermsView },
+  { path: '/privacy', name: 'privacy', component: PrivacyView },
+  { path: '/contact', name: 'contact', component: ContactView },
   cloudViews['./views/PricingView.vue']
     ? { path: '/pricing', name: 'pricing', component: cloudViews['./views/PricingView.vue'] }
     : { path: '/pricing', redirect: '/dashboard' },
